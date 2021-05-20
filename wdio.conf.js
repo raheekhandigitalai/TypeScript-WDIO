@@ -20,10 +20,11 @@ exports.config = {
     // according to your user and key information. However, if you are using a private Selenium
     // backend you should define the host address, port, and path here.
     //
-    // hostname: '172.18.5.185',
-    // port: 4444,
-    // path: '/wd/hub',
-    
+    hostname: 'uscloud.experitest.com',
+    port: 443,
+    path: '/wd/hub',
+    protocol: 'https',
+
     //
     // ==================
     // Specify Test Files
@@ -34,65 +35,20 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './test/**/*.ts'
+        // './test/**/*.ts'
+        './test/example.spec.ts'
     ],
-    // Patterns to exclude.
-    exclude: [
-        // 'path/to/excluded/files'
-    ],
-    //
-    // ============
-    // Capabilities
-    // ============
-    // Define your capabilities here. WebdriverIO can run multiple capabilities at the same
-    // time. Depending on the number of capabilities, WebdriverIO launches several test
-    // sessions. Within your capabilities you can overwrite the spec and exclude options in
-    // order to group specific specs to a specific capability.
-    //
-    // First, you can define how many instances should be started at the same time. Let's
-    // say you have 3 different capabilities (Chrome, Firefox, and Safari) and you have
-    // set maxInstances to 1; wdio will spawn 3 processes. Therefore, if you have 10 spec
-    // files and you set maxInstances to 10, all spec files will get tested at the same time
-    // and 30 processes will get spawned. The property handles how many capabilities
-    // from the same test should run tests.
-    //
+
     maxInstances: 10,
-    //
-    // If you have trouble getting all important capabilities together, check out the
-    // Sauce Labs platform configurator - a great tool to configure your capabilities:
-    // https://docs.saucelabs.com/reference/platforms-configurator
-    //
+
     capabilities: [
         {
-            // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-            // grid with only 5 firefox instances available you can make sure that not more than
-            // 5 instances get started at a time.
-            maxInstances: 5,
-            //
-            browserName: 'chrome',            
-            'goog:chromeOptions': {
-                // to run chrome headless the following flags are required
-                // (see https://developers.google.com/web/updates/2017/04/headless-chrome)
-                args: [
-                    '--headless', 
-                    '--disable-gpu'
-                ]                
-            }
+
+            browserName: 'chrome',
+            platformName: 'Android',
+            'experitest:accessKey' : "<access_key>"
         },
-        // {
-        //     // maxInstances can get overwritten per capability. So if you have an in house Selenium
-        //     // grid with only 5 firefox instance available you can make sure that not more than
-        //     // 5 instance gets started at a time.
-        //     maxInstances: 5,
-        //     browserName: 'firefox',
-        //     // specs: [
-        //     //     'test/ffOnly/*'
-        //     // ],
-        //     "moz:firefoxOptions": {
-        //     // flag to activate Firefox headless mode (see https://github.com/mozilla/geckodriver/blob/master/README.md#firefox-capabilities for more details about moz:firefoxOptions)
-        //     // args: ['-headless']
-        //     }
-        // }
+
     ],
     //
     // ===================
@@ -105,33 +61,28 @@ exports.config = {
     //
     // Warns when a deprecated command is used
     deprecationWarnings: true,
-    //
+
     // If you only want to run your tests until a specific amount of tests have failed use
     // bail (default is 0 - don't bail, run all tests).
     bail: 0,
-    //
-    // Set a base URL in order to shorten url command calls. If your `url` parameter starts
-    // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
-    // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
-    // gets prepended directly.
     baseUrl: baseUrl,
-    //
+
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
-    //
+
     // Default timeout in milliseconds for request
     // if Selenium Grid doesn't send response
     connectionRetryTimeout: 90000,
-    //
+
     // Default request retries count
     connectionRetryCount: 3,
-    //
+
     // Test runner services
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
     services: ['selenium-standalone'],
-    //
+
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
     // see also: https://webdriver.io/docs/frameworks.html
@@ -139,13 +90,12 @@ exports.config = {
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
     framework: 'mocha',
-    //
+
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter.html
-    reporters: ['spec','allure'],
-    
-    //
+    reporters: [],
+
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/
     mochaOpts: {
@@ -187,7 +137,7 @@ exports.config = {
      * @param {Array.<String>} specs List of spec file paths that are to be run
      */
     before: function (capabilities, specs) {
-        // require('ts-node/register');        
+        // require('ts-node/register');
         require('ts-node').register({ files: true });
     },
     /**
@@ -197,7 +147,7 @@ exports.config = {
      */
     // beforeCommand: function (commandName, args) {
     // },
-    
+
     /**
      * Hook that gets executed before the suite starts
      * @param {Object} suite suite details
@@ -226,11 +176,11 @@ exports.config = {
      * Function to be executed after a test (in Mocha/Jasmine) or a step (in Cucumber) starts.
      * @param {Object} test test details
      */
-    afterTest: function (test) {        
+    afterTest: function (test) {
         if (test.error !== undefined) {
             let name = 'ERROR-' + Date.now();
             browser.saveScreenshot('./errorShots/' + name + '.png');
-        }        
+        }
     },
     /**
      * Hook that gets executed after the suite has ended
@@ -238,7 +188,7 @@ exports.config = {
      */
     // afterSuite: function (suite) {
     // },
-    
+
     /**
      * Runs after a WebdriverIO command gets executed
      * @param {String} commandName hook command name

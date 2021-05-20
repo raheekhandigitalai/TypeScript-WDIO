@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 
-describe('webdriver.io page', () => {
+describe('google page', () => {
 	it('should have the right title', () => {
-		browser.url('/');
+		browser.url('https://google.com');
 		const title = browser.getTitle();
 		expect(title).to.be.equal(
-			'WebdriverIO · Next-gen WebDriver test framework for Node.js'
+			'Google'
 		);
 	});
 });
